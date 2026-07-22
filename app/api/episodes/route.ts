@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createEpisodeSchema, type ExperienceEpisode } from "@/lib/domain";
+import { toOperationalEpisodePayload } from "@/lib/data-boundary";
 import { applyYouCamPolicy } from "@/lib/policy";
 import { runtimeStore } from "@/lib/runtime-store";
 
@@ -29,5 +30,5 @@ export async function POST(request: Request) {
   });
 
   runtimeStore.episodes.set(episode.id, episode);
-  return NextResponse.json(episode, { status: 201 });
+  return NextResponse.json(toOperationalEpisodePayload(episode), { status: 201 });
 }

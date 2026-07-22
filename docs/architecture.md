@@ -9,6 +9,7 @@
 | Human reviewer | Confirms or corrects the proposed direction | Final authority |
 | Episode evaluator | Calculates explainable experience metrics | Evaluates confirmed records only |
 | Policy gate | Blocks restricted data from learning and export pipelines | Mandatory enforcement |
+| Gemini text coach | Receives a minimal provenance-checked text envelope | Suggests only; no YouCam media or derived data |
 
 ## State flow
 
@@ -24,6 +25,16 @@ Discover intent
 → Display coaching metrics
 ```
 
+The optional Gemini text lane branches before YouCam output is created:
+
+```text
+Human-authored intent + confirmed locale + first-party coaching goal
+→ Provenance validation
+→ Minimal Gemini text envelope
+→ Suggested conversation guidance
+→ Human review
+```
+
 ## Tool and data access
 
 | Component | May access | Must not access |
@@ -33,6 +44,8 @@ Discover intent
 | Episode service | Minimal task metadata, structured human outcome | Uploaded or generated media |
 | Analytics view | Aggregated episode metrics | Raw customer media or provider payloads |
 | Learning pipeline | Explicitly eligible non-YouCam data only | Any YouCam-assisted episode |
+| Gemini text adapter | Minimal human and catalog text envelope | YouCam media, results, task IDs, derived fields, or assisted episodes |
+| Gemini Vision adapter | Nothing in the YouCam flow | Every YouCam-associated input and output |
 
 ## Human escalation rules
 
@@ -52,3 +65,6 @@ Discover intent
 | Human requests adjustment | Outcome is recorded without pretending success |
 | YouCam episode reaches export gate | Every learning and export flag remains false |
 | API token appears in browser payload | Test fails and release is blocked |
+| Any YouCam origin targets Gemini or a learning destination | Transfer throws `DataBoundaryError` |
+| Internal episode is returned by an API route | Safe projection omits task ID and source |
+| Human confirmation attempts to remove a restriction | Restriction remains immutable |

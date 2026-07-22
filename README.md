@@ -30,6 +30,8 @@ This repository is a public demonstration project. It must not contain:
 
 Every episode that invokes YouCam must be excluded from model training, research exports, evaluation datasets, embeddings, synthetic-data pipelines, and world-model development.
 
+The same boundary applies to Gemini and other third-party models. YouCam input, output, derived data, and assisted episodes cannot enter Gemini text or vision inference. A future Gemini text coach must use the provenance-checked minimal envelope in `lib/data-boundary.ts`, which accepts only separately sourced human and first-party text fields.
+
 ```ts
 {
   source: "youcam",
@@ -72,6 +74,8 @@ The repository now includes:
 - Browser voice-intent capture when Web Speech API support is available
 - A high-contrast Rokid Max Pro companion view at `/wearable`
 - Unit tests for consent and downstream data restrictions
+- A code-enforced origin-to-destination matrix for YouCam, Gemini, datasets, and world models
+- Safe API projections that omit internal task identifiers and provider lineage
 
 Run the project with Node.js 22.12 or later:
 

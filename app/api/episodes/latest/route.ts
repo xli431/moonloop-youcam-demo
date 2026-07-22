@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { toOperationalEpisodePayload } from "@/lib/data-boundary";
 import { runtimeStore } from "@/lib/runtime-store";
 
 export const dynamic = "force-dynamic";
@@ -12,17 +13,7 @@ export async function GET() {
   }
 
   return NextResponse.json(
-    {
-      episode: {
-        id: latest.id,
-        productId: latest.productId,
-        customerIntent: latest.customerIntent,
-        humanOutcome: latest.humanOutcome,
-        score: latest.score,
-        createdAt: latest.createdAt,
-        policy: latest.policy,
-      },
-    },
+    { episode: toOperationalEpisodePayload(latest) },
     { headers: { "Cache-Control": "no-store" } },
   );
 }

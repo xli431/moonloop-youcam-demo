@@ -1,4 +1,5 @@
 import type { EpisodePolicy, ExperienceEpisode } from "./domain";
+import { assertEpisodeDestination } from "./data-boundary";
 
 export const YOUCAM_RESTRICTED_POLICY: EpisodePolicy = Object.freeze({
   trainingEligible: false,
@@ -11,10 +12,10 @@ export const YOUCAM_RESTRICTED_POLICY: EpisodePolicy = Object.freeze({
 export function applyYouCamPolicy<T extends Omit<ExperienceEpisode, "policy">>(
   episode: T,
 ): T & { policy: EpisodePolicy } {
-  return {
+  return Object.freeze({
     ...episode,
-    policy: { ...YOUCAM_RESTRICTED_POLICY },
-  };
+    policy: YOUCAM_RESTRICTED_POLICY,
+  });
 }
 
 export function canEnterLearningPipeline(episode: Pick<ExperienceEpisode, "policy">): boolean {
@@ -25,4 +26,11 @@ export function canEnterLearningPipeline(episode: Pick<ExperienceEpisode, "polic
     episode.policy.embeddingAllowed &&
     episode.policy.worldModelEligible
   );
+}
+
+export function assertCanEnterLearningPipeline(episode: ExperienceEpisode): void {
+  assertEpisodeDestination(episode, "training");
+  if (!canEnterLearningPipeline(episode)) {
+    throw new Error("Episode policy blocks entry into the learning pipeline");
+  }
 }

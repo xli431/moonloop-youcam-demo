@@ -22,5 +22,8 @@ describe("YouCam episode policy", () => {
       worldModelEligible: false,
     });
     expect(canEnterLearningPipeline(episode)).toBe(false);
+    expect(Object.isFrozen(episode)).toBe(true);
+    expect(Object.isFrozen(episode.policy)).toBe(true);
+    expect(() => Object.assign(episode.policy, { trainingEligible: true })).toThrow();
   });
 });
