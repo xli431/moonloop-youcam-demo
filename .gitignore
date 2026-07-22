@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.DS_Store
+*.log
+uploads/
+generated/
+artifacts/private/
