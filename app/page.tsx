@@ -16,9 +16,9 @@ type TaskStatus = "idle" | "queued" | "processing" | "completed" | "failed";
 type YouCamTask = {
   id: string;
   status: Exclude<TaskStatus, "idle">;
-  provider: "youcam-mock";
+  provider: "youcam-mock" | "youcam-live";
   productId: string;
-  result?: { previewTheme: string; notice: string };
+  result?: { previewTheme: string; notice: string; url?: string };
 };
 
 const products: Product[] = [
@@ -61,6 +61,9 @@ export default function Home() {
     "I am looking for something refined that works for travel and evening events.",
   );
   const [episodeScore, setEpisodeScore] = useState<number | null>(null);
+  const [hasConsent, setHasConsent] = useState(false);
+  const [sourceImage, setSourceImage] = useState<File | null>(null);
+  const [referenceImage, setReferenceImage] = useState<File | null>(null);
 
   const product = useMemo(
     () => products.find((item) => item.id === selectedProductId) ?? products[0],
@@ -72,6 +75,11 @@ export default function Home() {
 
     const timer = window.setInterval(async () => {
       const response = await fetch(`/api/youcam/tasks/${task.id}`, { cache: "no-store" });
+      if (!response.ok) {
+        setTaskStatus("failed");
+        window.clearInterval(timer);
+        return;
+      }
       const nextTask = (await response.json()) as YouCamTask;
       setTask(nextTask);
       setTaskStatus(nextTask.status);
@@ -85,19 +93,24 @@ export default function Home() {
   }, [task]);
 
   async function createVisualExperience() {
+    if (!hasConsent) return;
     setTaskStatus("queued");
     setConfirmation(null);
     setEpisodeScore(null);
     setStage(1);
 
-    const response = await fetch("/api/youcam/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const liveInputSelected = sourceImage && referenceImage;
+    const body = liveInputSelected
+      ? createLiveFormData(sourceImage, referenceImage)
+      : JSON.stringify({
         productId: product.id,
         experienceType: "apparel-vto",
         hasConsent: true,
-      }),
+      });
+    const response = await fetch("/api/youcam/tasks", {
+      method: "POST",
+      headers: liveInputSelected ? undefined : { "Content-Type": "application/json" },
+      body,
     });
 
     if (!response.ok) {
@@ -108,6 +121,16 @@ export default function Home() {
     const nextTask = (await response.json()) as YouCamTask;
     setTask(nextTask);
     setTaskStatus(nextTask.status);
+  }
+
+  function createLiveFormData(source: File, reference: File) {
+    const form = new FormData();
+    form.append("productId", product.id);
+    form.append("hasConsent", "true");
+    form.append("gender", "female");
+    form.append("sourceImage", source);
+    form.append("referenceImage", reference);
+    return form;
   }
 
   async function confirmOutcome(outcome: "confirmed" | "adjustment") {
@@ -259,10 +282,19 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <button className="primary-button" onClick={createVisualExperience} type="button">
+          <button className="primary-button" disabled={!hasConsent} onClick={createVisualExperience} type="button">
             Create visual experience <span>→</span>
           </button>
-          <p className="consent-line">✓ Demo consent recorded · No customer media is retained</p>
+          <div className="live-inputs">
+            <p>Optional live API inputs</p>
+            <label><span>Customer image</span><input accept="image/jpeg,image/png,image/heic" onChange={(event) => setSourceImage(event.target.files?.[0] ?? null)} type="file" /></label>
+            <label><span>Bag reference</span><input accept="image/jpeg,image/png,image/heic" onChange={(event) => setReferenceImage(event.target.files?.[0] ?? null)} type="file" /></label>
+          </div>
+          <label className="consent-check">
+            <input checked={hasConsent} onChange={(event) => setHasConsent(event.target.checked)} type="checkbox" />
+            <span>I consent to this temporary visual experience.</span>
+          </label>
+          <p className="consent-line">Customer media is processed at runtime and is never training-eligible</p>
         </article>
 
         <article className="panel result-panel" id="episode">
@@ -277,7 +309,11 @@ export default function Home() {
           <div className={`preview ${taskStatus === "completed" ? product.accent : "empty"}`}>
             {taskStatus === "completed" ? (
               <>
-                <div className="preview-orbit"><i /></div>
+                {task?.result?.url ? (
+                  <img alt={`YouCam virtual try-on result for ${product.name}`} referrerPolicy="no-referrer" src={task.result.url} />
+                ) : (
+                  <div className="preview-orbit"><i /></div>
+                )}
                 <p>{product.name}</p>
                 <span>Interactive demo preview</span>
               </>

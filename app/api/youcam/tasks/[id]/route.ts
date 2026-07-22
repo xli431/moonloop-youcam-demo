@@ -6,7 +6,13 @@ export async function GET(
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
-  const task = await getYouCamProvider().getTask(id);
+  let task;
+  try {
+    task = await getYouCamProvider().getTask(id);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Tool unavailable";
+    return NextResponse.json({ error: message }, { status: 503 });
+  }
 
   if (!task) {
     return NextResponse.json({ error: "Task not found" }, { status: 404 });

@@ -109,7 +109,16 @@ textarea:focus { border-color: var(--plum); box-shadow: 0 0 0 3px rgba(89,48,72,
 .selected .check { display: flex; }
 .primary-button { background: var(--plum-deep); border: 0; border-radius: 12px; color: #fff; display: flex; font-size: 12px; justify-content: space-between; margin-top: 20px; padding: 15px 17px; width: 100%; }
 .primary-button:hover { background: var(--plum); }
+.primary-button:disabled { cursor: not-allowed; opacity: .42; }
 .consent-line { color: var(--sage); font-size: 9px; margin: 12px 0 0; text-align: center; }
+.live-inputs { border-top: 1px solid var(--line); display: grid; gap: 8px; grid-template-columns: 1fr 1fr; margin-top: 16px; padding-top: 14px; }
+.live-inputs > p { color: var(--muted); font-size: 9px; grid-column: 1 / -1; letter-spacing: .08em; margin: 0; text-transform: uppercase; }
+.live-inputs label { background: #f8f5f1; border: 1px solid var(--line); border-radius: 9px; cursor: pointer; margin: 0; overflow: hidden; padding: 9px; text-align: center; }
+.live-inputs label span { display: block; font-size: 9px; text-transform: none; }
+.live-inputs input { font-size: 0; width: 0; }
+.consent-check { align-items: center; cursor: pointer; display: flex; gap: 8px; letter-spacing: 0; margin: 14px 0 0; text-transform: none; }
+.consent-check input { accent-color: var(--plum); }
+.consent-check span { color: var(--muted); font-size: 9px; }
 
 .task-status { color: var(--muted); }
 .task-status.completed { background: #e2eee7; color: var(--sage); }
@@ -123,6 +132,8 @@ textarea:focus { border-color: var(--plum); box-shadow: 0 0 0 3px rgba(89,48,72,
 .preview-placeholder { align-items: center; border: 1px solid rgba(89,48,72,.22); border-radius: 50%; color: var(--plum); display: flex; font-family: Georgia, serif; font-size: 28px; height: 74px; justify-content: center; width: 74px; }
 .preview-orbit { align-items: center; border: 1px solid rgba(255,255,255,.4); border-radius: 50%; display: flex; height: 140px; justify-content: center; width: 140px; }
 .preview-orbit i { background: currentColor; border-radius: 18% 18% 28% 28%; box-shadow: 0 22px 40px rgba(0,0,0,.24); display: block; height: 70px; opacity: .84; width: 88px; }
+.preview img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
+.preview img ~ p, .preview img ~ span { background: rgba(28,16,25,.74); border-radius: 5px; color: #fff; padding: 5px 8px; position: relative; z-index: 1; }
 .preview p { font-family: Georgia, serif; margin: 20px 0 5px; }
 .preview span { font-size: 9px; letter-spacing: .12em; opacity: .68; text-transform: uppercase; }
 .confirmation-box { margin-top: 20px; }

@@ -1,9 +1,9 @@
-import type { CreateYouCamTaskInput, ToolTask } from "../domain";
+import type { CreateYouCamToolInput, ToolTask } from "../domain";
 import { runtimeStore } from "../runtime-store";
 import type { YouCamToolProvider } from "./provider";
 
 export class MockYouCamProvider implements YouCamToolProvider {
-  async createTask(input: CreateYouCamTaskInput): Promise<ToolTask> {
+  async createTask(input: CreateYouCamToolInput): Promise<ToolTask> {
     const task: ToolTask = {
       id: crypto.randomUUID(),
       provider: "youcam-mock",

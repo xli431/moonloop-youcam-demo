@@ -17,15 +17,36 @@ export const createEpisodeSchema = z.object({
 export type CreateYouCamTaskInput = z.infer<typeof createYouCamTaskSchema>;
 export type CreateEpisodeInput = z.infer<typeof createEpisodeSchema>;
 
+export type RuntimeMedia = {
+  fileName: string;
+  contentType: "image/jpeg" | "image/png" | "image/heic";
+  fileSize: number;
+  bytes: Uint8Array;
+};
+
+export type CreateYouCamToolInput = CreateYouCamTaskInput & {
+  sourceMedia?: RuntimeMedia;
+  referenceMedia?: RuntimeMedia;
+  gender?: "female" | "male";
+  style?:
+    | "random"
+    | "style_parisian_chic"
+    | "style_urban_chic"
+    | "style_mediterranean_chic"
+    | "style_art_deco_style";
+};
+
 export type ToolTask = {
   id: string;
-  provider: "youcam-mock";
+  provider: "youcam-mock" | "youcam-live";
   productId: string;
   status: "queued" | "processing" | "completed" | "failed";
   createdAt: number;
+  externalTaskId?: string;
   result?: {
     previewTheme: string;
     notice: string;
+    url?: string;
   };
 };
 

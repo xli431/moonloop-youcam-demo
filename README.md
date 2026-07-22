@@ -83,4 +83,6 @@ Then open `http://localhost:3000`.
 
 ## Next integration milestone
 
-The current build intentionally uses `YOUCAM_API_MODE=mock` and never uploads an image. The next milestone is to map the selected YouCam product's official authentication, upload, task creation, polling, and result contracts into the existing provider interface. Live mode must not be enabled until that mapping and its redaction tests are complete.
+The official AI Bag Virtual Try-On V2.0 contract is implemented behind the same provider interface. The application remains in safe mock mode by default.
+
+To test the live provider, create `.env.local`, set `YOUCAM_API_MODE=live`, and add your API key to `YOUCAM_API_TOKEN`. Never paste that key into client code, screenshots, issues, or commits. Live mode requires a consented customer image and a licensed bag reference image.

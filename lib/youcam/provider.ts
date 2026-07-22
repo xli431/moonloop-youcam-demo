@@ -1,6 +1,6 @@
-import type { CreateYouCamTaskInput, ToolTask } from "../domain";
+import type { CreateYouCamToolInput, ToolTask } from "../domain";
 
 export interface YouCamToolProvider {
-  createTask(input: CreateYouCamTaskInput): Promise<ToolTask>;
+  createTask(input: CreateYouCamToolInput): Promise<ToolTask>;
   getTask(taskId: string): Promise<ToolTask | null>;
 }
