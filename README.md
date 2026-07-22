@@ -59,6 +59,28 @@ Copy `.env.example` to `.env.local` and add credentials only on your own machine
 
 Never commit `.env.local`, API tokens, uploaded images, generated results, or production logs.
 
-## Status
+## Current MVP
 
-Repository initialized. YouCam API integration is the next implementation milestone.
+The repository now includes:
+
+- A responsive English retail experience interface
+- A consent-gated mock YouCam task flow
+- Asynchronous task creation and status polling
+- Human confirmation before episode completion
+- A structured episode schema and explainable score
+- Hard policy gates for every YouCam-assisted episode
+- Browser voice-intent capture when Web Speech API support is available
+- Unit tests for consent and downstream data restrictions
+
+Run the project with Node.js 22.12 or later:
+
+```bash
+npm install
+npm run dev
+```
+
+Then open `http://localhost:3000`.
+
+## Next integration milestone
+
+The current build intentionally uses `YOUCAM_API_MODE=mock` and never uploads an image. The next milestone is to map the selected YouCam product's official authentication, upload, task creation, polling, and result contracts into the existing provider interface. Live mode must not be enabled until that mapping and its redaction tests are complete.
