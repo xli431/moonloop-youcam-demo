@@ -192,6 +192,7 @@ export default function Home() {
           <a className="active" href="#experience">Live Experience</a>
           <a href="#episode">Episode</a>
           <a href="#insight">Manager Insight</a>
+          <a href="/wearable">Wearable View</a>
         </nav>
         <div className="status-pill"><span /> Demo environment</div>
       </header>

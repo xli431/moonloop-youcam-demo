@@ -15,6 +15,4 @@ export const runtimeStore: RuntimeStore =
     episodes: new Map<string, ExperienceEpisode>(),
   };
 
-if (process.env.NODE_ENV !== "production") {
-  globalStore.__moonloopRuntimeStore = runtimeStore;
-}
+globalStore.__moonloopRuntimeStore = runtimeStore;

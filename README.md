@@ -70,6 +70,7 @@ The repository now includes:
 - A structured episode schema and explainable score
 - Hard policy gates for every YouCam-assisted episode
 - Browser voice-intent capture when Web Speech API support is available
+- A high-contrast Rokid Max Pro companion view at `/wearable`
 - Unit tests for consent and downstream data restrictions
 
 Run the project with Node.js 22.12 or later:
@@ -86,3 +87,5 @@ Then open `http://localhost:3000`.
 The official AI Bag Virtual Try-On V2.0 contract is implemented behind the same provider interface. The application remains in safe mock mode by default.
 
 To test the live provider, create `.env.local`, set `YOUCAM_API_MODE=live`, and add your API key to `YOUCAM_API_TOKEN`. Never paste that key into client code, screenshots, issues, or commits. Live mode requires a consented customer image and a licensed bag reference image.
+
+The wearable MVP is a browser companion for Rokid Max Pro paired with Station Pro. It does not claim native UXR2.0, camera, gesture, spatial-anchor, or 6DoF support. Follow the [Rokid test plan](docs/rokid-test-plan.md) for physical-device validation.
